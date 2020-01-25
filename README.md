@@ -1,17 +1,18 @@
 # XETOX
 
 **TODO:
+Data loader
 
-### Description
+## Description
 
-Pytorchを使用し、簡単な全結合層で競馬の予想をする。
+This is a PyTorch implementation of horse racing prediction
 
 ### Installation
 
-    ```
-    pip install pytorch numpy
-    git clone https://github.com/ukyoukatsura/xetox.git
-    ```
+```
+pip install pytorch numpy
+git clone https://github.com/ukyoukatsura/xetox.git
+```
 
 ### Usage
 

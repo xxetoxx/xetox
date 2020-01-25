@@ -1,5 +1,5 @@
-#Pytorch
-import torch #Pytorchのモジュール
+#PyTorch
+import torch #PyTorchのモジュール
 import torch.nn as nn #基本的なネットワーク構造
 import torch.nn.functional as F #ネットワークの関数
 import torch.optim as optim #最適化関数
