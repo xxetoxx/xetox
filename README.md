@@ -14,11 +14,17 @@ Pytorchを使用し、簡単な全結合層で競馬の予想をする。
 
 - Pytorch
 - GPU
--
 
 ## Installation
 
+```
+pip install pytorch numpy
+git clone https://github.com/ukyoukatsura/xetox.git
+```
+
 ## Usage
+
+- Python xetox.py
 
 ## Author
 
