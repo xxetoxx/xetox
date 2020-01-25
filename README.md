@@ -1,26 +1,26 @@
 # XETOX
 
-**TODO:
+**TODO:  
 Data loader
 
 ## Description
 
 This is a PyTorch implementation of horse racing prediction
 
-### Installation
+## Installation
 
 ```
 pip install pytorch numpy
 git clone https://github.com/ukyoukatsura/xetox.git
 ```
 
-### Usage
+## Usage
 
 ```
 cd xetox
 Python xetox.py
 ```
 
-### Author
+## Author
 
 Katsura Ukyo
