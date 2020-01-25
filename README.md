@@ -24,7 +24,9 @@ git clone https://github.com/ukyoukatsura/xetox.git
 
 ## Usage
 
-- Python xetox.py
+```
+Python xetox.py
+```
 
 ## Author
 
