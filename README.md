@@ -1,36 +1,25 @@
 # XETOX
 
-Deep Learningで競馬の予想をする。
+**TODO:
 
-## Description
+### Description
 
 Pytorchを使用し、簡単な全結合層で競馬の予想をする。
 
-## Features
+### Installation
 
-- 競走馬が1位になる確率を出力する。
+    ```
+    pip install pytorch numpy
+    git clone https://github.com/ukyoukatsura/xetox.git
+    ```
 
-## Requirement
-
-- Pytorch
-- GPU
-
-## Installation
-
-```Shell
-pip install pytorch numpy
-git clone https://github.com/ukyoukatsura/xetox.git
-```
-
-## Usage
+### Usage
 
 ```
 cd xetox
 Python xetox.py
 ```
 
-## Author
+### Author
 
 Katsura Ukyo
-
-## License
