@@ -1,9 +1,12 @@
-import torch
-from torch.autograd import Variable
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-import numpy as np
+#Pytorch
+import torch #Pytorchのモジュール
+import torch.nn as nn #基本的なネットワーク構造
+import torch.nn.functional as F #ネットワークの関数
+import torch.optim as optim #最適化関数
+from torch.autograd import Variable #自動微分
+#基本ライブラリ
+import numpy as np #数値計算
+
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 
