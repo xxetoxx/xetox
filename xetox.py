@@ -1,37 +1,27 @@
-from __future__ import print_function
-import argparse
+#PyTorch
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.optim.lr_scheduler import StepLR
-
+#Common
+import argparse
+import pandas as pd
 
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout2d(0.25)
-        self.dropout2 = nn.Dropout2d(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.fc1 = nn.Linear(69, 300)
+        self.fc2 = nn.Linear(300, 300)
+        self.fc3 = nn.Linear(300, 1)
+        self.dropout = nn.Dropout(0.2)
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = F.relu(x)
-        x = self.conv2(x)
-        x = F.max_pool2d(x, 2)
-        x = self.dropout1(x)
-        x = torch.flatten(x, 1)
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.dropout2(x)
-        x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
-        return output
-
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = self.fc3(x)
+        return x
 
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
@@ -123,70 +113,5 @@ def main():
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")
 
-
 if __name__ == '__main__':
     main()
-
-# #PyTorch
-# import torch #PyTorchのモジュール
-# import torch.nn as nn #基本的なネットワーク構造
-# import torch.nn.functional as F #ネットワークの関数
-# import torch.optim as optim #最適化関数
-# #from torch.autograd import Variable #自動微分
-# #基本ライブラリ
-# import numpy as np #数値計算
-
-# from sklearn import datasets
-# from sklearn.model_selection import train_test_split
-
-# print(torch.__version__)
-# # network definition
-# class Net(nn.Module):
-
-#     def __init__(self):
-#         super(Net, self).__init__()
-#         self.fc1 = nn.Linear(4, 10)
-#         self.fc2 = nn.Linear(10, 8)
-#         self.fc3 = nn.Linear(8, 3)
-
-#     def forward(self, x):
-#         x = F.relu(self.fc1(x))
-#         x = F.relu(self.fc2(x))
-#         x = self.fc3(x)
-#         return x
-
-# iris = datasets.load_iris()
-# y = np.zeros((len(iris.target), 1 + iris.target.max()), dtype=int)
-# y[np.arange(len(iris.target)), iris.target] = 1
-# X_train, X_test, y_train, y_test = train_test_split(iris.data, y, test_size=0.25)
-# # x = Variable(torch.from_numpy(X_train).float(), requires_grad=True)
-# # y = Variable(torch.from_numpy(y_train).float())
-# x = torch.from_numpy(X_train).float()
-# #x.requires_grad = True
-# y = torch.from_numpy(y_train).float()
-
-# net = Net()
-# optimizer = optim.SGD(net.parameters(), lr=0.01)
-# criterion = nn.MSELoss()
-
-# for i in range(3000):
-#     optimizer.zero_grad()
-#     output = net(x)
-#     loss = criterion(output, y)
-#     loss.backward()
-#     optimizer.step()
-
-# # test
-# outputs = net(torch.from_numpy(X_test).float())
-# _, predicted = torch.max(outputs.data, 1)
-# y_predicted = predicted.numpy()
-# y_true = np.argmax(y_test, axis=1)
-# accuracy = (int)(100 * np.sum(y_predicted == y_true) / len(y_predicted))
-# print('accuracy: {0}%'.format(accuracy))
-
-
-# # utility function to predict for an unknown data
-# def predict(X):
-#     X = Variable(torch.from_numpy(np.array(X)).float())
-#     outputs = net(X)
-#     return np.argmax(outputs.data.numpy())
