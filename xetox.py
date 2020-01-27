@@ -11,7 +11,7 @@ import codecs
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(69, 300)
+        self.fc1 = nn.Linear(5, 300)
         self.fc2 = nn.Linear(300, 300)
         self.fc3 = nn.Linear(300, 1)
         self.dropout = nn.Dropout(0.2)
@@ -27,7 +27,7 @@ class Net(nn.Module):
 def train(args, model, device, train_loader, optimizer, epoch):
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
-        data, target = data.to(device), target.to(device)
+        #data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
         loss = F.nll_loss(output, target)
@@ -59,7 +59,8 @@ def test(args, model, device, test_loader):
 
 class MyDataset(torch.utils.data.Dataset):
     def __init__(self, data_num):
-        self.data_num = 5
+        self.data_num = data_num
+        #データの前処理が必要、、、
         with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
             self.df = pd.read_csv(file, delimiter=",", names=["年","月","日","馬名","馬番","枠番","年齢","性別","馬体重","斤量","場所","頭数","距離","馬場状態","天候","人気","単勝オッズ","確定着順","タイムS","着差タイム","トラックコード"])
             #print(df)
@@ -68,8 +69,8 @@ class MyDataset(torch.utils.data.Dataset):
         return self.data_num
 
     def __getitem__(self, idx):
-        out_data = torch.tensor(self.df[["年","月","日"]].iloc[idx])
-        out_label = torch.tensor(self.df["確定着順"].iloc[idx])
+        out_data = torch.tensor(self.df[["馬番","枠番","年齢","馬体重","斤量"]].iloc[idx])
+        out_label = torch.tensor(float(self.df["確定着順"].iloc[idx]))
 
         return out_data, out_label
 
@@ -86,10 +87,10 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False, help='For Saving the current Model')
     args = parser.parse_args()
 
-    data_set = MyDataset(10)
-    dataloader = torch.utils.data.DataLoader(data_set, batch_size=2, shuffle=False)
+    data_set = MyDataset(16)
+    train_loader = torch.utils.data.DataLoader(data_set, batch_size=4, shuffle=False)
 
-    for i in dataloader:
+    for i in train_loader:
         print(i)
 
     # with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
@@ -99,35 +100,48 @@ def main():
     # #torch_tensor = torch.tensor(df["馬体重"].values)
     # torch_tensor = torch.tensor(df["確定着順"].iloc[2])
     # print(torch_tensor)
-    # use_cuda = not args.no_cuda and torch.cuda.is_available()
+    use_cuda = not args.no_cuda and torch.cuda.is_available()
 
-    # torch.manual_seed(args.seed)
+    torch.manual_seed(args.seed)
+
+    net = Net()
+    optimizer = optim.SGD(net.parameters(), lr=0.01)
+    criterion = nn.MSELoss()
+    for batch_idx, (data, target) in enumerate(train_loader):
+        optimizer.zero_grad()
+        output = net(data)
+        print(output)
+        print(target)
+        loss = criterion(output, target)
+        loss.backward()
+        optimizer.step()
 
     # device = torch.device("cuda" if use_cuda else "cpu")
+    # device = torch.device("cpu")
 
-    # kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-    # train_loader = torch.utils.data.DataLoader(
-    #     datasets.MNIST('../data', train=True, download=True,
-    #                    transform=transforms.Compose([
-    #                        transforms.ToTensor(),
-    #                        transforms.Normalize((0.1307,), (0.3081,))
-    #                    ])),
-    #     batch_size=args.batch_size, shuffle=True, **kwargs)
-    # test_loader = torch.utils.data.DataLoader(
-    #     datasets.MNIST('../data', train=False, transform=transforms.Compose([
-    #                        transforms.ToTensor(),
-    #                        transforms.Normalize((0.1307,), (0.3081,))
-    #                    ])),
-    #     batch_size=args.test_batch_size, shuffle=True, **kwargs)
+    # # kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
+    # # train_loader = torch.utils.data.DataLoader(
+    # #     datasets.MNIST('../data', train=True, download=True,
+    # #                    transform=transforms.Compose([
+    # #                        transforms.ToTensor(),
+    # #                        transforms.Normalize((0.1307,), (0.3081,))
+    # #                    ])),
+    # #     batch_size=args.batch_size, shuffle=True, **kwargs)
+    # # test_loader = torch.utils.data.DataLoader(
+    # #     datasets.MNIST('../data', train=False, transform=transforms.Compose([
+    # #                        transforms.ToTensor(),
+    # #                        transforms.Normalize((0.1307,), (0.3081,))
+    # #                    ])),
+    # #     batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
     # model = Net().to(device)
     # optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
-    # scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+    # # scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     # for epoch in range(1, args.epochs + 1):
     #     train(args, model, device, train_loader, optimizer, epoch)
-    #     test(args, model, device, test_loader)
-    #     scheduler.step()
+    # #     test(args, model, device, test_loader)
+    # #     scheduler.step()
 
     # if args.save_model:
     #     torch.save(model.state_dict(), "mnist_cnn.pt")
