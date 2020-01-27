@@ -1,6 +1,6 @@
 # XETOX
 
-**TODO:Data loader**
+**TODO:Data loader,Preprocess data,**
 
 ## Description
 
@@ -9,7 +9,7 @@ This is a PyTorch implementation of horse racing prediction
 ## Installation
 
 ```
-pip install torch numpy
+pip install torch numpy pandas
 git clone https://github.com/ukyoukatsura/xetox.git
 ```
 
