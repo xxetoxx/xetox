@@ -25,14 +25,16 @@ class Net(nn.Module):
         return x
 
 def train(args, model, device, train_loader, optimizer, epoch):
+    criterion = nn.MSELoss()
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
-        #data, target = data.to(device), target.to(device)
+        data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-        loss = F.nll_loss(output, target)
+        loss = criterion(output, target)
         loss.backward()
         optimizer.step()
+        print(batch_idx)
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -70,7 +72,7 @@ class MyDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         out_data = torch.tensor(self.df[["馬番","枠番","年齢","馬体重","斤量"]].iloc[idx])
-        out_label = torch.tensor(float(self.df["確定着順"].iloc[idx]))
+        out_label = torch.tensor([float(self.df["確定着順"].iloc[idx])])
 
         return out_data, out_label
 
@@ -90,8 +92,8 @@ def main():
     data_set = MyDataset(16)
     train_loader = torch.utils.data.DataLoader(data_set, batch_size=4, shuffle=False)
 
-    for i in train_loader:
-        print(i)
+    # for i in train_loader:
+    #     print(i)
 
     # with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
     #     df = pd.read_csv(file, delimiter=",", names=["年","月","日","馬名","馬番","枠番","年齢","性別","馬体重","斤量","場所","頭数","距離","馬場状態","天候","人気","単勝オッズ","確定着順","タイムS","着差タイム","トラックコード"])
@@ -101,23 +103,25 @@ def main():
     # torch_tensor = torch.tensor(df["確定着順"].iloc[2])
     # print(torch_tensor)
     use_cuda = not args.no_cuda and torch.cuda.is_available()
+    print(torch.cuda.is_available())
 
     torch.manual_seed(args.seed)
+    #torch.manual_seed(0)
 
-    net = Net()
-    optimizer = optim.SGD(net.parameters(), lr=0.01)
-    criterion = nn.MSELoss()
-    for batch_idx, (data, target) in enumerate(train_loader):
-        optimizer.zero_grad()
-        output = net(data)
-        print(output)
-        print(target)
-        loss = criterion(output, target)
-        loss.backward()
-        optimizer.step()
+    # net = Net()
+    # optimizer = optim.SGD(net.parameters(), lr=0.01)
+    # criterion = nn.MSELoss()
+    # for batch_idx, (data, target) in enumerate(train_loader):
+    #     optimizer.zero_grad()
+    #     output = net(data)
+    #     print(output)
+    #     print(target)
+    #     loss = criterion(output, target)
+    #     loss.backward()
+    #     optimizer.step()
 
-    # device = torch.device("cuda" if use_cuda else "cpu")
-    # device = torch.device("cpu")
+    device = torch.device("cuda" if use_cuda else "cpu")
+    #device = torch.device("cpu")
 
     # # kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
     # # train_loader = torch.utils.data.DataLoader(
@@ -134,17 +138,17 @@ def main():
     # #                    ])),
     # #     batch_size=args.test_batch_size, shuffle=True, **kwargs)
 
-    # model = Net().to(device)
-    # optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
+    model = Net().to(device)
+    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
-    # # scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
-    # for epoch in range(1, args.epochs + 1):
-    #     train(args, model, device, train_loader, optimizer, epoch)
-    # #     test(args, model, device, test_loader)
-    # #     scheduler.step()
+    # scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+    for epoch in range(1, args.epochs + 1):
+        train(args, model, device, train_loader, optimizer, epoch)
+    #     test(args, model, device, test_loader)
+    #     scheduler.step()
 
-    # if args.save_model:
-    #     torch.save(model.state_dict(), "mnist_cnn.pt")
+    if args.save_model:
+        torch.save(model.state_dict(), "mnist_cnn.pt")
 
 if __name__ == '__main__':
     main()
