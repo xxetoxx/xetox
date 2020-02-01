@@ -8,8 +8,11 @@ This is a PyTorch implementation of horse racing prediction
 
 ## Installation
 
+[Install Anaconda](https://www.anaconda.com/)
+
+[Install PyTorch](https://pytorch.org/)
+
 ```
-pip install torch numpy pandas
 git clone https://github.com/ukyoukatsura/xetox.git
 ```
 
