@@ -8,4 +8,4 @@ with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
 #df.to_csv("./data/train_data_utf_8.csv")
 
 #print(df[df["年"] == 20])
-print(df["馬名"].value_counts())
+print(df["天候"].value_counts())
