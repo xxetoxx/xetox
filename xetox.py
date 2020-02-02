@@ -29,8 +29,8 @@ class Net(nn.Module):
 class MyDataset(torch.utils.data.Dataset):
     def __init__(self):
         self.df = pd.read_csv("./data/train_data_utf_8_preprocessing.csv", delimiter=",")
-        #self.data_num = len(self.df)
-        self.data_num = 100
+        self.data_num = len(self.df)
+        #self.data_num = 100
 
     def __len__(self):
         return self.data_num
@@ -48,12 +48,12 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
-        print(target)
-        print(output)
+        #print(target)
+        #print(output)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
-        print(batch_idx)
+        #print(batch_idx)
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -80,17 +80,17 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch implementation of horse racing prediction')
     parser.add_argument('--batch-size', type=int, default=64, metavar='N', help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N', help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=14, metavar='N', help='number of epochs to train (default: 14)')
+    parser.add_argument('--epochs', type=int, default=100, metavar='N', help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.0, metavar='LR', help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M', help='Learning rate step gamma (default: 0.7)')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=1, metavar='N', help='how many batches to wait before logging training status')
+    parser.add_argument('--log-interval', type=int, default=1000, metavar='N', help='how many batches to wait before logging training status')
     parser.add_argument('--save-model', action='store_true', default=False, help='For Saving the current Model')
     args = parser.parse_args()
 
     data_set = MyDataset()
-    train_loader = torch.utils.data.DataLoader(data_set, batch_size=4, shuffle=False)
+    train_loader = torch.utils.data.DataLoader(data_set, batch_size=args.batch_size, shuffle=False)
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     print(torch.cuda.is_available())
