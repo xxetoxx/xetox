@@ -79,6 +79,9 @@ Katsura Ukyo
 
 * 確定着順
 
+* タイムS
+    * datetime:秒数
+
 * 着差タイム
 
 * トラックコード
