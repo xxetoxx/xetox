@@ -5,9 +5,9 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 #Common
-import argparse
 import pandas as pd
 import codecs
+import argparse
 
 class Net(nn.Module):
     def __init__(self):
@@ -16,6 +16,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(300, 300)
         self.fc3 = nn.Linear(300, 1)
         self.dropout = nn.Dropout(0.2)
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         x = F.relu(self.fc1(x))

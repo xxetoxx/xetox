@@ -26,3 +26,6 @@ Python xetox.py
 ## Author
 
 Katsura Ukyo
+
+## Data Pre-Processing
+
