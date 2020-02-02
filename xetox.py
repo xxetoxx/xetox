@@ -29,7 +29,7 @@ class Net(nn.Module):
 class MyDataset(torch.utils.data.Dataset):
     def __init__(self):
         self.df = pd.read_csv("./data/train_data_utf_8_preprocessing.csv", delimiter=",")
-        self.data_num = len(self.df)
+        self.data_num = len(self.df) / 10
         #self.data_num = 100
 
     def __len__(self):
@@ -80,7 +80,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch implementation of horse racing prediction')
     parser.add_argument('--batch-size', type=int, default=64, metavar='N', help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N', help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=100, metavar='N', help='number of epochs to train (default: 14)')
+    parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.0, metavar='LR', help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M', help='Learning rate step gamma (default: 0.7)')
     parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
