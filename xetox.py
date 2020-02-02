@@ -6,13 +6,12 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 #Common
 import pandas as pd
-import codecs
 import argparse
 
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(5, 300)
+        self.fc1 = nn.Linear(13, 300)
         self.fc2 = nn.Linear(300, 300)
         self.fc3 = nn.Linear(300, 1)
         self.dropout = nn.Dropout(0.2)
@@ -24,23 +23,22 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.dropout(x)
         x = self.fc3(x)
+        #x = self.sigmoid(x)
         return x
 
 class MyDataset(torch.utils.data.Dataset):
-    def __init__(self, data_num):
-        self.data_num = data_num
-        #データの前処理が必要、、、
-        with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
-            self.df = pd.read_csv(file, delimiter=",", names=["年","月","日","馬名","馬番","枠番","年齢","性別","馬体重","斤量","場所","頭数","距離","馬場状態","天候","人気","単勝オッズ","確定着順","タイムS","着差タイム","トラックコード"])
-            #print(df)
+    def __init__(self):
+        self.df = pd.read_csv("./data/train_data_utf_8_preprocessing.csv", delimiter=",")
+        #self.data_num = len(self.df)
+        self.data_num = 100
 
     def __len__(self):
         return self.data_num
 
     def __getitem__(self, idx):
-        out_data = torch.tensor(self.df[["馬番","枠番","年齢","馬体重","斤量"]].iloc[idx])
-        out_label = torch.tensor([float(self.df["確定着順"].iloc[idx])])
-
+        out_data = torch.tensor(self.df[["馬番","枠番","年齢","性別","馬体重","斤量","場所","頭数","距離","馬場状態","天候","人気","トラックコード"]].iloc[idx])
+        #out_label = torch.tensor([1.0 if self.df["確定着順"].iloc[idx] < 4 else 0.0])
+        out_label = torch.tensor([self.df["確定着順"].iloc[idx]])
         return out_data, out_label
 
 def train(args, model, device, train_loader, optimizer, epoch):
@@ -50,6 +48,8 @@ def train(args, model, device, train_loader, optimizer, epoch):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
+        print(target)
+        print(output)
         loss = criterion(output, target)
         loss.backward()
         optimizer.step()
@@ -71,9 +71,7 @@ def test(args, model, device, test_loader):
             test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
-
     test_loss /= len(test_loader.dataset)
-
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
@@ -91,19 +89,9 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False, help='For Saving the current Model')
     args = parser.parse_args()
 
-    data_set = MyDataset(16)
+    data_set = MyDataset()
     train_loader = torch.utils.data.DataLoader(data_set, batch_size=4, shuffle=False)
 
-    # for i in train_loader:
-    #     print(i)
-
-    with codecs.open("./data/train_data.csv", "r", "Shift-JIS", "ignore") as file:
-        df = pd.read_csv(file, delimiter=",", names=["年","月","日","馬名","馬番","枠番","年齢","性別","馬体重","斤量","場所","頭数","距離","馬場状態","天候","人気","単勝オッズ","確定着順","タイムS","着差タイム","トラックコード"])
-        print(df)
-    # print(df.iloc[2])
-    # #torch_tensor = torch.tensor(df["馬体重"].values)
-    # torch_tensor = torch.tensor(df["確定着順"].iloc[2])
-    # print(torch_tensor)
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     print(torch.cuda.is_available())
 
@@ -121,7 +109,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "mnist_cnn.pt")
+        torch.save(model.state_dict(), "horse_racing_prediction.pt")
 
 if __name__ == '__main__':
     main()
