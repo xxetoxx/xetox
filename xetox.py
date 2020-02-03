@@ -78,7 +78,7 @@ def test(args, model, device, test_loader):
 
 def main():
     parser = argparse.ArgumentParser(description='PyTorch implementation of horse racing prediction')
-    parser.add_argument('--batch-size', type=int, default=100, metavar='N', help='input batch size for training (default: 64)')
+    parser.add_argument('--batch-size', type=int, default=2, metavar='N', help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N', help='input batch size for testing (default: 1000)')
     parser.add_argument('--epochs', type=int, default=100, metavar='N', help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1.0, metavar='LR', help='learning rate (default: 1.0)')
@@ -109,7 +109,7 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        torch.save(model.state_dict(), "horse_racing_prediction.pt")
+        torch.save(model.state_dict(), "horse_racing_prediction2.pt")
 
 if __name__ == '__main__':
     main()
