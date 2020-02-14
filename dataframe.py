@@ -31,7 +31,7 @@ DF=pd.DataFrame()
 
 df = pd.read_csv("./data/train_data_namesort_test.csv", delimiter=",", index_col=0) #nunamed;0  非表示　
 #print(df)
-dfname=df['馬名']
+dfname=df['馬名'] #Series
 #print(dfname.iloc[:,1])
 for i in range(datasize-5):
     if dfname.iloc[i] == dfname.iloc[i+1]:
