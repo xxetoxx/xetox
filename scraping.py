@@ -10,3 +10,4 @@ soup = BeautifulSoup(r.text, "html.parser")
 
 #print(soup.prettify()) # HTMLをインデントすることができます
 print(soup.title.string) #titleのテキストのみ出力
+#
