@@ -5,10 +5,16 @@ import time
 import difflib
 import csv
 import re
+'''
+csv化コード
+with open("a.txt","r",encoding="utf-8") as f:
+    text=f.read()
 
+text_mod=re.sub('◯|▲|△|☆|－',",",text)
+with open("a.csv","w",encoding="utf-8") as f:
+    f.write(text_mod)
 
-
-
+'''
 
 # d = difflib.Differ()
 # diff = d.compare(text1_lines, text2_lines)
