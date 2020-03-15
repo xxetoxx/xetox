@@ -7,17 +7,7 @@ import csv
 import re
 
 #Ctrl + Alt + L 整形
-'''
 
-#csv化コード
-with open("yuma1.txt","r",encoding="cp932") as f:
-    text=f.read()
-
-text_mod=re.sub('◯|△|☆|－|(▲&^[(▲])',",",text)
-with open("aaa.csv","w",encoding="utf-8") as f:
-    f.write(text_mod)
-
-'''
 
 url = "https://www.ai-yuma.com/"
 
