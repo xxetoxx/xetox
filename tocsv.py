@@ -17,7 +17,7 @@ for line in open("aaa.txt","r",encoding="utf8"):
        # print(re.sub(r'.+中央の結果|.+([0-9],[0-9],[0-9]).+',"",line)) #中央の結果記事を削除する
        # print(re.search(r'[0-9]{8}',line)) #日付
         #print(re.search(r'[0-9]{,2}R',line)) #レース番号
-        print(re.search(r'.*(?=\d+R)',line)) #レース場()
+        print(re.search(r'.*(?=\d+R)',line)) #レース場()\d{1}R|\d{2}R でやってみる
 
 
 
