@@ -14,9 +14,10 @@ line
 for line in open("aaa.txt","r",encoding="utf8"):
     if line[0] != "\n":
         #ここから考える
-         print(re.sub(r'.+中央の結果|.+([0-9],[0-9],[0-9]).+',"",line))
-       # print(re.search(r'[0-9]{8}',line))
-       # print(re.search(r'[0-9]{2}R',line))
+       # print(re.sub(r'.+中央の結果|.+([0-9],[0-9],[0-9]).+',"",line)) #中央の結果記事を削除する
+       # print(re.search(r'[0-9]{8}',line)) #日付
+        #print(re.search(r'[0-9]{,2}R',line)) #レース番号
+        print(re.search(r'.*(?=\d+R)',line)) #レース場()
 
 
 
