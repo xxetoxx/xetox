@@ -14,7 +14,9 @@ line
 for line in open("aaa.txt","r",encoding="utf8"):
     if line[0] != "\n":
         #ここから考える
-        text_mod=re.sub('◯|△|☆|－|(▲&^[(▲])',",",line)
+         print(re.sub(r'.+中央の結果|.+([0-9],[0-9],[0-9]).+',"",line))
+       # print(re.search(r'[0-9]{8}',line))
+       # print(re.search(r'[0-9]{2}R',line))
 
 
 
@@ -22,9 +24,5 @@ for line in open("aaa.txt","r",encoding="utf8"):
 #     text=f.read()
 # print(text)
 
-""""
-text_mod=re.sub('◯|△|☆|－|(▲&^[(▲])',",",text)
-with open("aaa.csv","w",encoding="utf-8") as f:
-    f.write(text_mod)
-"""
+
 
