@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-#with open("yuma_resultdelete.txt","w",encoding="utf8") as f:
+#with open("yuma.txt","w",encoding="utf8") as f:
 for line in open("aaa.txt","r",encoding="utf8"):
      #f.write(re.sub(r'.+中央の結果|.+([0-9],[0-9],[0-9]).+',"",line)) #中央の結果記事を削除する
      #print(re.search(r'[0-9]{8}',line)) #日付
